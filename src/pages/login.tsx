@@ -76,7 +76,7 @@ const Login = () => {
               <div className='font-medium text-base '>
                 The next gen business marketplace
               </div>
-              <form className="space-y-4 md:space-y-6 " >
+              <form className="space-y-4 md:space-y-6 ">
                 <div>
                   <label className="block mb-2 text-sm font-medium text-black text-left"   >Email</label>
                   <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder="Enter" className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 " />

@@ -1,15 +1,24 @@
 import React from 'react';
 import classnames from 'classnames';
 import { usePagination, DOTS } from '~/hooks/usePagination';
-const Pagination = (props: any) => {
+interface Props {
+  onPageChange: (page: number) => void,
+  totalCount: number | undefined,
+  currentPage: number,
+  pageSize: number,
+  className: string
+}
+
+const Pagination = (props: Props) => {
   const {
     onPageChange,
     totalCount,
-    siblingCount = 1,
     currentPage,
     pageSize,
     className
   } = props;
+
+  const siblingCount = 1;
 
   const paginationRange = usePagination({
     currentPage,
@@ -53,7 +62,7 @@ const Pagination = (props: any) => {
             </div>
           </div>
         </div>      </li>
-      {paginationRange?.map((pageNumber: any) => {
+      {paginationRange?.map((pageNumber: string | number) => {
 
         if (pageNumber === DOTS) {
           return <li className="pagination-item dots" key={pageNumber}>&#8230;</li>;
@@ -62,10 +71,10 @@ const Pagination = (props: any) => {
         return (
           <li
             className={classnames('pagination-item', {
-              selected: pageNumber === currentPage
+              selected: pageNumber == currentPage
             })}
             key={pageNumber}
-            onClick={() => onPageChange(pageNumber)}
+            onClick={() => onPageChange(+pageNumber)}
           >
             {pageNumber}
           </li>
