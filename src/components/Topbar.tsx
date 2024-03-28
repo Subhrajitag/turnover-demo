@@ -1,4 +1,4 @@
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import { JwtPayload } from "jsonwebtoken";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -15,13 +15,15 @@ const navContents = ["Categories", "Sale", "Clearance", "New stock", "Trending"]
 const Topbar = () => {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
+    const token = getCookie("authorization");
+
     useEffect(() => {
         const userData = getLoggedInUser() as User;
         const fetchUserData = () => {
             setUser(userData);
         };
         fetchUserData();
-    }, [router.isReady]);
+    }, [router.isReady, token]);
 
     const handleLogout = async () => {
         deleteCookie("authorization");
