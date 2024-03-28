@@ -3,7 +3,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import Pagination from '~/components/Pagination';
 import getLoggedInUser from '~/utils/getLoggedInUser';
-
+import { useRouter } from "next/router";
 
 interface Category {
   id: number;
@@ -16,7 +16,7 @@ export default function Home() {
   const loggedInUser = getLoggedInUser() as { id: number };
   const { data: user } = api.user.getUserById.useQuery(+(loggedInUser?.id));
   const { data: categories } = api.category.allCategories.useQuery();
-
+  const router = useRouter();
   const updateUser = api.user.updateUserCategories.useMutation();
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryIds, setCategoryIds] = useState<number[]>([]);
@@ -24,6 +24,9 @@ export default function Home() {
   useEffect(() => {
     const userCategories = user?.categories?.map((category: Category) => category.id) ?? [];
     setCategoryIds(userCategories);
+    if (!user) {
+      router.push("/login")
+    }
   }, [user])
 
   const totalCategories = useMemo(() => {

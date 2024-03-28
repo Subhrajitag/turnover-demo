@@ -45,7 +45,7 @@ const EmailConfirmation = () => {
           showConfirmButton: false,
           timer: 1500
         });
-\        
+        
         await router.push("/login");
 
       } else {
