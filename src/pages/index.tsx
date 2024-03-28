@@ -3,7 +3,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import Pagination from '~/components/Pagination';
 import getLoggedInUser from '~/utils/getLoggedInUser';
-import { useRouter } from "next/router";
+import Link from 'next/link';
 
 
 interface Category {
@@ -17,7 +17,6 @@ export default function Home() {
   const loggedInUser = getLoggedInUser() as { id: number };
   const { data: user } = api.user.getUserById.useQuery(+(loggedInUser?.id));
   const { data: categories } = api.category.allCategories.useQuery();
-  const router = useRouter();
   const updateUser = api.user.updateUserCategories.useMutation();
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryIds, setCategoryIds] = useState<number[]>([]);
@@ -52,6 +51,7 @@ export default function Home() {
       console.error("Error updating user's categories:", error);
     }
   };
+
 
   return (
     <>
@@ -106,7 +106,7 @@ export default function Home() {
             </div>
             :
             <div className='flex justify-center items-center'>
-              <button className="uppercase bg-black px-4 py-2 text-white rounded-md " onClick={() => router.push("/")} > Go to login page</button>
+              <Link className="uppercase bg-black px-4 py-2 text-white rounded-md " href='/login' > Go to login page</Link>
             </div>
         }
       </div>
