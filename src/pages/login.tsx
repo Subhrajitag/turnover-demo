@@ -64,8 +64,14 @@ const Login = () => {
           router.push("/");
         }
       }
-    } catch {
-      console.error("error occured");
+    } catch (error) {
+      await Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: (error as { message: string }).message,
+        showConfirmButton: false,
+        timer: 1500
+      })
 
     }
   }

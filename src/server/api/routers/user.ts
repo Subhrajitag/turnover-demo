@@ -62,7 +62,7 @@ export const userRouter = createTRPCRouter({
         },
       };
       const jwtToken = jwt.sign(data, secret);
-      return { jwtToken,user };
+      return { jwtToken, user };
     }),
   login: publicProcedure
     .input(
@@ -76,19 +76,22 @@ export const userRouter = createTRPCRouter({
 
       const { email, password } = input;
       const user = await ctx.db.user.findFirstOrThrow({ where: { email } });
-      if (await argon2.verify(user.password, password)) {
-        const { id, email, name } = user;
-        const data = {
-          user: {
-            id,
-            email,
-            name,
-          },
-        };
-        const jwtToken = jwt.sign(data, secret);
-        return { jwtToken, success: true };
+      if (user) {
+        if (await argon2.verify(user.password, password)) {
+          const { id, email, name } = user;
+          const data = {
+            user: {
+              id,
+              email,
+              name,
+            },
+          };
+          const jwtToken = jwt.sign(data, secret);
+          return { jwtToken, success: true };
+        }
+        throw new Error("Password is wrong");
       }
-      return { success: false };
+      throw new Error("User not found");
     }),
   updateUserCategories: publicProcedure
     .input(
