@@ -13,9 +13,8 @@ interface Category {
 
 export default function Home() {
   const PageSize = 6;
-  const userData = getLoggedInUser();
-  const loggedInUser = userData as { id: number };
-  const { data: user } = api.user.getUserById.useQuery(loggedInUser.id);
+  const loggedInUser = getLoggedInUser() as { id: number };
+  const { data: user } = api.user.getUserById.useQuery(+(loggedInUser?.id));
   const { data: categories } = api.category.allCategories.useQuery();
 
   const updateUser = api.user.updateUserCategories.useMutation();
@@ -51,8 +50,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Turnover | Home</title>
-        <meta name="description" content="Turnover home page" />
+        <title>test-t3 | Home</title>
+        <meta name="description" content="test-t3 home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex items-center justify-center h-full ">

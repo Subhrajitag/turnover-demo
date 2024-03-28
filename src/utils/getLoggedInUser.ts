@@ -16,13 +16,17 @@ const getLoggedInUser = () => {
     }
 
     const userToken: string | undefined = tokenParts[1];
-    if (userToken) {
-      return decode(userToken, process.env.JWT_SECRET as DecodeOptions) as {
-        name: string;
-        email: string;
-        password: string;
-        id: number;
+    if (userToken && userToken !== "undefined") {
+      const loggedInUser =decode(userToken, process.env.JWT_SECRET as DecodeOptions) as {
+        user: {
+          name: string;
+          email: string;
+          password: string;
+          id: number;
+        }
       };
+      
+      return loggedInUser?.user;
     }
     return null;
   }

@@ -5,7 +5,8 @@ import React, { useState } from 'react'
 import Button from '~/components/Button'
 import Swal from "sweetalert2";
 import { api } from '~/utils/api'
-import { getCookie, setCookie } from 'cookies-next'
+import { setCookie } from 'cookies-next'
+import getLoggedInUser from '~/utils/getLoggedInUser'
 
 const Login = () => {
   const router = useRouter();
@@ -55,15 +56,12 @@ const Login = () => {
       if (email && password) {
         await login.mutateAsync({ email, password });
         const auth_token = login?.data?.jwtToken;
-        if (auth_token) {
-          setCookie("authorization", `Bearer ${auth_token}`);
-        }
+        setCookie("authorization", `Bearer ${auth_token}`);
 
-        const auth_header = getCookie("authorization");
-        if (auth_header) {
-          if (auth_header.startsWith("Bearer ")) {
-          } router.push("/");
+        const loggedInUser = getLoggedInUser() as { id: number };
 
+        if (loggedInUser) {
+          router.push("/");
         }
       }
     } catch {
@@ -75,8 +73,8 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Turnover | Login</title>
-        <meta name="description" content="Turnover home page" />
+        <title>test-t3 | Login</title>
+        <meta name="description" content="test-t3 home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full h-screen">

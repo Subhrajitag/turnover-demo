@@ -16,9 +16,9 @@ const Topbar = () => {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     useEffect(() => {
+        const userData = getLoggedInUser() as User;
         const fetchUserData = () => {
-            const userData: string | JwtPayload | null = getLoggedInUser();
-            setUser(userData as User);
+            setUser(userData);
         };
         fetchUserData();
     }, [router.isReady]);
@@ -27,7 +27,6 @@ const Topbar = () => {
         deleteCookie("authorization");
         await router.push("/login");
     }
-    console.log(user);
 
     return (
         <>

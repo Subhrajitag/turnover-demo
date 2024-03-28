@@ -85,8 +85,8 @@ const Signup = () => {
   return (
     <>
       <Head>
-        <title>Turnover | Signup</title>
-        <meta name="description" content="Turnover home page" />
+        <title>test-t3 | Signup</title>
+        <meta name="description" content="test-t3 home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full h-screen">
