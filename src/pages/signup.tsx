@@ -21,7 +21,7 @@ const Signup = () => {
     return Math.floor(100000 + Math.random() * 900000);
   };
 
-  const handleSignup = async (event: any) => {
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!name) {
       Swal.fire({
@@ -30,6 +30,8 @@ const Signup = () => {
         title: "Name field can't be empty",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     } else if (!email) {
@@ -39,6 +41,8 @@ const Signup = () => {
         title: "Email field can't be empty",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email)) {
@@ -48,6 +52,8 @@ const Signup = () => {
         title: "Enter a valid email!",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     } else if (!password) {
@@ -57,6 +63,8 @@ const Signup = () => {
         title: "Password field can't be empty",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     }
@@ -64,12 +72,12 @@ const Signup = () => {
     if (name && email && password) {
       try {
         const otp = generateOTP();
-        signup.mutate({ email, otp });
+        await signup.mutateAsync({ email, otp });
         setSignUpData({ name, email, password, otp });
 
-        router.push("/email-confirmation");
-      } catch (error: any) {
-        console.error(error.message);
+       await router.push("/email-confirmation");
+      } catch (error) {
+        console.error(error);
       }
     }
   }
@@ -88,7 +96,7 @@ const Signup = () => {
               <h1 className="text-xl font-bold text-center tracking-tight text-gray-900 md:text-2xl ">
                 Create your account
               </h1>
-              <form className="space-y-4 md:space-y-6 ">
+              <form className="space-y-4 md:space-y-6 " onSubmit={handleSignup}>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900">Name</label>
                   <input name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 " />
@@ -102,7 +110,7 @@ const Signup = () => {
                   <input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 " />
                 </div>
 
-                <Button buttonText="Create an account" className='' handleClick={() => handleSignup} />
+                <Button buttonText="Create an account" className='' />
                 <div className="sm:my-4 my-2 text-center">
                   <p className="text-sm font-light ">
                     Have an Account?

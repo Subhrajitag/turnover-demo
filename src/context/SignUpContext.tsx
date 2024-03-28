@@ -16,7 +16,7 @@ interface SignUpContextType {
 
 const SignUpContext = createContext<SignUpContextType | undefined>(undefined);
 
-export const SignUpProvider: React.FC<SignUpProviderProps> = ({ children }:any) => {
+export const SignUpProvider: React.FC<SignUpProviderProps> = ({ children }) => {
   const [signUpData, setSignUpData] = useState<SignUpData | null>(null);
 
   return <SignUpContext.Provider value={{ signUpData, setSignUpData }}>{children}</SignUpContext.Provider>;

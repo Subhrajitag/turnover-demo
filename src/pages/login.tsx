@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (event: any) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email) {
@@ -23,6 +23,8 @@ const Login = () => {
         title: "Email field can't be empty",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email)) {
@@ -32,6 +34,8 @@ const Login = () => {
         title: "Enter a valid email!",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     } else if (!password) {
@@ -41,19 +45,30 @@ const Login = () => {
         title: "Password field can't be empty",
         showConfirmButton: false,
         timer: 1500
+      }).catch(() => {
+        console.log("Error");
       });
       return;
     }
 
-    if (email && password) {
-      login.mutateAsync({ email, password });
-      const auth_token = login?.data?.jwtToken;
-      console.log(auth_token);
+    try {
+      if (email && password) {
+        await login.mutateAsync({ email, password });
+        const auth_token = login?.data?.jwtToken;
+        if (auth_token) {
+          setCookie("authorization", `Bearer ${auth_token}`);
+        }
 
-      setCookie("authorization", `Bearer ${auth_token}`);
-      if (getCookie("authorization") && getCookie("authorization")?.substring(7, getCookie("authorization")?.length) != 'undefined') {
-        router.push("/");
+        const auth_header = getCookie("authorization");
+        if (auth_header) {
+          if (auth_header.startsWith("Bearer ")) {
+          } router.push("/");
+
+        }
       }
+    } catch {
+      console.log("error occured");
+
     }
   }
 
@@ -76,7 +91,7 @@ const Login = () => {
               <div className='font-medium text-base '>
                 The next gen business marketplace
               </div>
-              <form className="space-y-4 md:space-y-6 ">
+              <form className="space-y-4 md:space-y-6 " onSubmit={handleLogin}>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-black text-left"   >Email</label>
                   <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder="Enter" className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 " />
@@ -86,7 +101,7 @@ const Login = () => {
                   <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder="Enter" className="bg-gray-50 border border-gray-300 text-black sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 " />
                 </div>
 
-                <Button className="uppercase" buttonText="Login" handleClick={() => handleLogin} />
+                <Button className="uppercase" buttonText="Login" />
                 <div className="sm:my-4 my-2 text-center">
                   <p className="text-sm font-light ">
                     Don’t have an Account?

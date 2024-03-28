@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { hash } from "argon2";
+import argon2, { hash } from "argon2";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { sendEmail } from "~/utils/nodemailer";
 import jwt from "jsonwebtoken";
-const argon2 = require("argon2");
-const secret = process.env.JWT_SECRET as string;
+
+const secret: string = process.env.JWT_SECRET!;
 
 export const userRouter = createTRPCRouter({
   signup: publicProcedure

@@ -10,27 +10,13 @@ interface Category {
   name: string;
 }
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  otp: string | null;
-  categories: Categories;
-}
-interface Categories {
-  id: number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: number | null;
-}[];
 
 export default function Home() {
-  let PageSize = 6;
-  const userData: any = getLoggedInUser();
-
+  const PageSize = 6;
+  const userData = getLoggedInUser();
+  const loggedInUser = userData as { id: number };
+  const { data: user } = api.user.getUserById.useQuery(loggedInUser.id);
   const { data: categories } = api.category.allCategories.useQuery();
-  const { data: user } = api.user.getUserById.useQuery(userData?.user?.id);
 
   const updateUser = api.user.updateUserCategories.useMutation();
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,16 +25,16 @@ export default function Home() {
   const totalCategories = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return categories?.slice(firstPageIndex, lastPageIndex);
+    return categories?.slice(firstPageIndex, lastPageIndex) as Category[];
   }, [currentPage, categories]);
 
-  const categoryIds: any = user?.categories?.map(category => category?.id);
+  const categoryIds: number[] = user?.categories?.map((category: Category) => category.id) ?? [];
 
   const addCategoryToUser = async (category: Category, checked: boolean) => {
     try {
       if (!user) return;
 
-      let updatedSelectedCategories;
+      let updatedSelectedCategories: number[] = [];
       if (checked) {
         updatedSelectedCategories = [...categoryIds, category.id];
       } else {
@@ -80,19 +66,19 @@ export default function Home() {
             </h1>
             <div>
               <div className="my-2 text-black ">
-                My saved Interests !
+                My saved Interests!
               </div>
               <div className="flex flex-col gap-2">
                 {
-                  totalCategories && totalCategories?.map((category: Category) => {
+                  totalCategories?.map((category: Category) => {
                     return (
                       <div key={category.id} className="flex flex-row gap-3">
                         <input type="checkbox" name="category"
                           id={`category_${category.id}`}
                           value={category.id}
                           checked={user && categoryIds?.includes(category?.id)}
-                          onChange={(e) => {
-                            addCategoryToUser(category, e.target.checked)
+                          onChange={async (e) => {
+                            await addCategoryToUser(category, e.target.checked)
                           }}
                         />
                         {category.name}

@@ -1,23 +1,33 @@
 import { deleteCookie } from "cookies-next";
+import { JwtPayload } from "jsonwebtoken";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import getLoggedInUser from "~/utils/getLoggedInUser";
 
-
+interface User {
+    name: string;
+    email: string;
+    password: string;
+}
 const navContents = ["Categories", "Sale", "Clearance", "New stock", "Trending"];
 
 const Topbar = () => {
     const router = useRouter();
-    const [user, setUser]: any = useState([]);
-    const userData: any = getLoggedInUser();
+    const [user, setUser] = useState<User | null>(null);
     useEffect(() => {
-        setUser(userData?.user);
-    }, [router.isReady, getLoggedInUser]);
+        const fetchUserData = () => {
+            const userData: string | JwtPayload | null = getLoggedInUser();
+            setUser(userData as User);
+        };
+        fetchUserData();
+    }, [router.isReady]);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         deleteCookie("authorization");
-        router.push("/login");
+        await router.push("/login");
     }
+    console.log(user);
 
     return (
         <>
@@ -53,36 +63,40 @@ const Topbar = () => {
                     </div>
 
                     <div className="w-1/5 flex flex-row justify-end gap-5 text-[#333]">
-                        <img
-                            className="h-6 w-6"
-                            loading="lazy"
-                            alt=""
+                        <Image
                             src="/search.svg"
-                        />
-                        <img
-                            className="h-5 w-5"
+                            alt="Search"
                             loading="lazy"
-                            alt=""
+                            width={24}
+                            height={24} />
+                        <Image
                             src="/cart.svg"
-                        />
+                            alt="cart"
+                            loading="lazy"
+                            width={20}
+                            height={20} />
 
                     </div>
                 </header>
                 <div className="h-8 flex justify-center items-center w-full bg-[#F4F4F4]">
                     <div className="flex gap-3">
-                        <img
-                            className="h-4 w-4 "
+                        <Image
+                            height={16}
+                            width={16}
                             alt="left-arrow"
                             src="/left-arrow.svg"
                         />
+
                         <div className="text-sm font-medium ">
                             Get 10% off on business sign up
                         </div>
-                        <img
-                            className="h-4 w-4"
+                        <Image
+                            height={16}
+                            width={16}
                             alt="right-arrow"
                             src="/right-arrow.svg"
                         />
+
                     </div>
                 </div>
             </div>
