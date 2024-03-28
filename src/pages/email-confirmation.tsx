@@ -10,12 +10,12 @@ import Swal from 'sweetalert2';
 const otpInputs = Array.from({ length: 6 }, () => React.createRef<HTMLInputElement>());
 
 const EmailConfirmation = () => {
-  const { signUpData, setSignUpData } = useSignUp();
+  const { signUpData } = useSignUp();
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
-  
+
   const confirmSignup = api.user.confirmSignup.useMutation();
+
   const router = useRouter();
-  console.log({ ...signUpData });
 
   const handleInputChange = (index: number, value: string) => {
     const newOtp = [...otp];
@@ -37,11 +37,16 @@ const EmailConfirmation = () => {
           name: signUpData?.name ?? '',
           password: signUpData?.password ?? ''
         });
-        const { name, email, password } = confirmSignup?.data?.result as { name: string; email: string; password: string; };
 
-        setSignUpData({ name, email, password, otp: sentOtp });
-
-        await router.push("/");
+        await Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Otp verified successfully.",
+          showConfirmButton: false,
+          timer: 1500
+        });
+\        
+        await router.push("/login");
 
       } else {
         Swal.fire({
@@ -51,7 +56,7 @@ const EmailConfirmation = () => {
           showConfirmButton: false,
           timer: 1500
         }).catch(() => {
-          console.log("Error");
+          console.error("Error");
         });
         await router.push("/signup");
       }

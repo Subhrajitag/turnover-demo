@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Head from "next/head";
 import { api } from "~/utils/api";
 import Pagination from '~/components/Pagination';
@@ -19,7 +19,12 @@ export default function Home() {
 
   const updateUser = api.user.updateUserCategories.useMutation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [categoryIds, setCategoryIds] = useState<number[]>([]);
 
+  useEffect(() => {
+    const userCategories = user?.categories?.map((category: Category) => category.id) ?? [];
+    setCategoryIds(userCategories);
+  }, [user])
 
   const totalCategories = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -27,7 +32,6 @@ export default function Home() {
     return categories?.slice(firstPageIndex, lastPageIndex) as Category[];
   }, [currentPage, categories]);
 
-  const categoryIds: number[] = user?.categories?.map((category: Category) => category.id) ?? [];
 
   const addCategoryToUser = async (category: Category, checked: boolean) => {
     try {
@@ -39,7 +43,7 @@ export default function Home() {
       } else {
         updatedSelectedCategories = categoryIds.filter((id: number) => id !== category.id);
       }
-
+      setCategoryIds(updatedSelectedCategories)
       updateUser.mutate({ userId: user?.id, categoryIds: updatedSelectedCategories });
 
     } catch (error) {

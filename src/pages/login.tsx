@@ -25,7 +25,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500
       }).catch(() => {
-        console.log("Error");
+        console.error("Error");
       });
       return;
     } else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email)) {
@@ -36,7 +36,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500
       }).catch(() => {
-        console.log("Error");
+        console.error("Error");
       });
       return;
     } else if (!password) {
@@ -47,7 +47,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500
       }).catch(() => {
-        console.log("Error");
+        console.error("Error");
       });
       return;
     }
@@ -65,7 +65,7 @@ const Login = () => {
         }
       }
     } catch {
-      console.log("error occured");
+      console.error("error occured");
 
     }
   }

@@ -53,11 +53,16 @@ export const userRouter = createTRPCRouter({
           password: hashedPassword,
         },
       });
-      return {
-        status: 201,
-        message: "Account created successfully",
-        result: user,
+
+      const data = {
+        user: {
+          id: user.id,
+          email,
+          name,
+        },
       };
+      const jwtToken = jwt.sign(data, secret);
+      return { jwtToken,user };
     }),
   login: publicProcedure
     .input(
