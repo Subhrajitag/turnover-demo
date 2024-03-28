@@ -3,11 +3,9 @@ import { api } from '~/utils/api'
 
 const products = () => {
     const product = api.category.create.useMutation();
-    const addProducts = () => {
-        console.log("fghjkl;");
-        
+    const addProducts = async() => {        
         for (let i = 0; i < 100; i++) {
-            product.mutateAsync();
+           await product.mutateAsync();
         }
     }
     return (
