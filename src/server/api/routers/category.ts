@@ -1,10 +1,8 @@
-import { z } from "zod";
 import { faker } from '@faker-js/faker';
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const categoryRouter = createTRPCRouter({
   create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       return ctx.db.category.create({
