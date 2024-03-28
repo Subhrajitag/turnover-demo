@@ -5,6 +5,7 @@ import Pagination from '~/components/Pagination';
 import getLoggedInUser from '~/utils/getLoggedInUser';
 import { useRouter } from "next/router";
 
+
 interface Category {
   id: number;
   name: string;
@@ -24,9 +25,7 @@ export default function Home() {
   useEffect(() => {
     const userCategories = user?.categories?.map((category: Category) => category.id) ?? [];
     setCategoryIds(userCategories);
-    if (!user) {
-      router.push("/login")
-    }
+
   }, [user])
 
   const totalCategories = useMemo(() => {
@@ -63,45 +62,50 @@ export default function Home() {
       </Head>
       <div className="flex items-center justify-center h-full ">
         <div className="w-full bg-white rounded-[20px] shadow md:mt-0 sm:max-w-lg xl:p-0 border-[1px] ">
-          <div className=" space-y-4 md:space-y-6 p-16 text-[#333333]">
-            <h1 className="text-xl font-bold text-center tracking-tight text-black md:text-2xl ">
-              Please mark your interests
-              <div className='font-medium text-base'>
-                We will keep you notified.
+          {
+            user ?
+              <div className=" space-y-4 md:space-y-6 p-16 text-[#333333]">
+                <h1 className="text-xl font-bold text-center tracking-tight text-black md:text-2xl ">
+                  Please mark your interests
+                  <div className='font-medium text-base'>
+                    We will keep you notified.
+                  </div>
+                </h1>
+                <div>
+                  <div className="my-2 text-black ">
+                    My saved Interests!
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {
+                      totalCategories?.map((category: Category) => {
+                        return (
+                          <div key={category.id} className="flex flex-row gap-3">
+                            <input type="checkbox" name="category"
+                              id={`category_${category.id}`}
+                              value={category.id}
+                              checked={user && categoryIds?.includes(category?.id)}
+                              onChange={async (e) => {
+                                await addCategoryToUser(category, e.target.checked)
+                              }}
+                            />
+                            {category.name}
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <Pagination
+                    className="pagination-bar mt-8"
+                    currentPage={currentPage}
+                    totalCount={categories?.length}
+                    pageSize={PageSize}
+                    onPageChange={(page: number) => setCurrentPage(page)}
+                  />
+                </div>
               </div>
-            </h1>
-            <div>
-              <div className="my-2 text-black ">
-                My saved Interests!
-              </div>
-              <div className="flex flex-col gap-2">
-                {
-                  totalCategories?.map((category: Category) => {
-                    return (
-                      <div key={category.id} className="flex flex-row gap-3">
-                        <input type="checkbox" name="category"
-                          id={`category_${category.id}`}
-                          value={category.id}
-                          checked={user && categoryIds?.includes(category?.id)}
-                          onChange={async (e) => {
-                            await addCategoryToUser(category, e.target.checked)
-                          }}
-                        />
-                        {category.name}
-                      </div>
-                    )
-                  })
-                }
-              </div>
-              <Pagination
-                className="pagination-bar mt-8"
-                currentPage={currentPage}
-                totalCount={categories?.length}
-                pageSize={PageSize}
-                onPageChange={(page: number) => setCurrentPage(page)}
-              />
-            </div>
-          </div>
+              :
+              <button className="uppercase bg-black px-4 py-2" onClick={() => router.push("/")} > Go to login page</button>
+          }
         </div>
       </div>
     </>
