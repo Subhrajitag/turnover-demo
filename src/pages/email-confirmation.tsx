@@ -63,8 +63,8 @@ const EmailConfirmation = () => {
   return (
     <>
       <Head>
-        <title>test-t3 | Email Confirmation</title>
-        <meta name="description" content="test-t3 home page" />
+        <title>turnover | Email Confirmation</title>
+        <meta name="description" content="turnover home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full h-screen">

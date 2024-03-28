@@ -73,8 +73,8 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>test-t3 | Login</title>
-        <meta name="description" content="test-t3 home page" />
+        <title>turnover | Login</title>
+        <meta name="description" content="turnover home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full h-screen">

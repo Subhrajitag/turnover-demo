@@ -50,8 +50,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>test-t3 | Home</title>
-        <meta name="description" content="test-t3 home page" />
+        <title>turnover | Home</title>
+        <meta name="description" content="turnover home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex items-center justify-center h-full ">
