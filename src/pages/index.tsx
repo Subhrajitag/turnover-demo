@@ -61,9 +61,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex items-center justify-center h-full ">
-        <div className="w-full bg-white rounded-[20px] shadow md:mt-0 sm:max-w-lg xl:p-0 border-[1px] ">
-          {
-            user ?
+        {
+          user ?
+            <div className="w-full bg-white rounded-[20px] shadow md:mt-0 sm:max-w-lg xl:p-0 border-[1px] ">
               <div className=" space-y-4 md:space-y-6 p-16 text-[#333333]">
                 <h1 className="text-xl font-bold text-center tracking-tight text-black md:text-2xl ">
                   Please mark your interests
@@ -103,10 +103,12 @@ export default function Home() {
                   />
                 </div>
               </div>
-              :
-              <button className="uppercase bg-black px-4 py-2" onClick={() => router.push("/")} > Go to login page</button>
-          }
-        </div>
+            </div>
+            :
+            <div className='flex justify-center items-center'>
+              <button className="uppercase bg-black px-4 py-2 text-white rounded-md " onClick={() => router.push("/")} > Go to login page</button>
+            </div>
+        }
       </div>
     </>
   );
